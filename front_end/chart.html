@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Weather</title>
+        <meta name="description" content="This is description">
+        <meta name="viewpoint" content="width=device-width, initial-scale=1">
+     </head>
+     <body>
+         <canvas id="myChart"></canvas>
+         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+         <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+           <script>
+            $.get( "http://localhost:8000/pushups/", function( response ) {
+                    console.log(response);
+                    var datasets = [];
+                    var colors = ['#4169E1', '#FA8072', '#DC143C']
+                    var i = 0;
+                    for (var country in response) {
+                        if (response.hasOwnProperty(country)) {
+                            var thisDataset = {
+                                label: country,
+                                fill: false,
+                                data: response[country],
+                                backgroundColor: colors[i],
+                                borderColor: colors[i],
+                            }
+                            datasets.push(thisDataset)
+                        }
+                        i++;
+                    }
+                    console.log(datasets)
+                    var config = {
+                        type: 'line',
+                        data: {
+                            labels: ['10AM', '11AM', '12AM', '1PM', '2PM', '3PM', '4PM', '5PM'],
+                            datasets: datasets,
+                            options: {
+                                responsive: true,
+                                title: {
+                                    display: true,
+                                    text: 'Number of Pushups'
+                                },
+                                tooltips: {
+                                    mode: 'index',
+                                    intersect: false,
+                                },
+                                hover: {
+                                    mode: 'nearest',
+                                    intersect: true
+                                },
+                                scales: {
+                                    xAxes: [{
+                                        display: true,
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Time'
+                                        }
+                                    }],
+                                    yAxes: [{
+                                        display: true,
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Number of Pushups'
+                                        }
+                                    }]
+                                }
+                            }
+                        }
+                    };
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    window.myLine = new Chart(ctx, config);
+                });
+              </script>
+            </body>
+            </html>
